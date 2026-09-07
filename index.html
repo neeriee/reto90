@@ -1,512 +1,143 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RETO 90 — Solicitud de Acceso</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #050505;
-            --bg-card: #111111;
-            --accent: #ccff00; /* Verde Reto 90 */
-            --text: #ffffff;
-            --text-muted: #888888;
-            --border: #222222;
-        }
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RETO 90 — Protocolo de Acceso</title>
+<style>
+:root{--bg:#080808;--fg:#f3f3ee;--muted:#92928c;--line:#252525;--panel:#111;--accent:#dfff38}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--fg);font-family:Arial,Helvetica,sans-serif;letter-spacing:-.025em}.wrap{max-width:1320px;margin:auto;padding:0 30px}
+nav{height:82px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}.logo{font-weight:950;font-size:25px;letter-spacing:-.08em}.logo b{color:var(--accent)}.nav{font-size:10px;color:var(--muted);letter-spacing:.18em;text-transform:uppercase}
+.hero{min-height:calc(100vh - 82px);display:flex;align-items:flex-end;padding:70px 0 55px;position:relative;overflow:hidden}.hero:after{content:"90";position:absolute;right:-4vw;top:5vh;font-size:42vw;line-height:.7;font-weight:950;color:#101010;letter-spacing:-.13em}.hero .content{position:relative;z-index:1}.eyebrow,.kicker{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:28px}
+h1{font-size:clamp(90px,15vw,210px);line-height:.73;letter-spacing:-.1em;margin:0}.lead{font-size:clamp(22px,3vw,40px);line-height:1.02;max-width:780px;margin:52px 0 35px}.lead strong{font-weight:900}.cta{border:0;cursor:pointer;background:var(--accent);color:#080808;padding:19px 23px;font-weight:900;font-size:11px;letter-spacing:.16em;text-transform:uppercase;display:inline-flex;gap:26px;align-items:center}.cta:after{content:"↗";font-size:17px}.note{font-size:10px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-top:17px}
+.section{padding:145px 0;border-top:1px solid var(--line)}.statement{font-size:clamp(54px,8.6vw,125px);line-height:.84;letter-spacing:-.085em;margin:0}.dim{color:#777}.two{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:80px}.tile{background:var(--panel);padding:42px;min-height:320px}.tile .n{color:var(--accent);font-size:10px;letter-spacing:.18em}.tile h2{font-size:60px;letter-spacing:-.075em;margin:100px 0 15px}.tile p{color:var(--muted);max-width:480px;line-height:1.4}
+.black{background:var(--fg);color:#090909}.black .kicker{color:#090909}.black .cta{background:#090909;color:#fff}.black h2{font-size:clamp(70px,11vw,160px);line-height:.8;letter-spacing:-.09em;margin:0 0 50px}
+footer{padding:50px 0;display:flex;justify-content:space-between;color:var(--muted);font-size:10px;letter-spacing:.16em;text-transform:uppercase}
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.95);backdrop-filter:blur(20px);z-index:10;display:none}.modal.open{display:block}.flow{height:100%;max-width:1100px;margin:auto;padding:26px 30px;display:flex;flex-direction:column}.flowtop{display:flex;justify-content:space-between;align-items:center}.flowlogo{font-weight:950;font-size:21px}.flowlogo b{color:var(--accent)}.counter{font-size:10px;letter-spacing:.2em;color:var(--muted)}.close{border:0;background:none;color:#999;font-size:30px;cursor:pointer}
+.progress{height:2px;background:#262626;margin-top:24px}.bar{height:100%;width:0;background:var(--accent);transition:.4s}.question{flex:1;display:flex;align-items:center}.qbox{width:100%;max-width:900px}.qk{font-size:10px;color:var(--accent);letter-spacing:.22em;text-transform:uppercase;margin-bottom:25px}.qtitle{font-size:clamp(44px,6.3vw,82px);line-height:.9;letter-spacing:-.075em;margin:0 0 16px}.qdesc{color:var(--muted);font-size:17px;line-height:1.45;max-width:640px}.qdesc strong{color:var(--fg);font-weight:600}.options{display:flex;flex-wrap:wrap;gap:8px;margin-top:38px}.opt{background:#111;border:1px solid #303030;color:#eee;padding:15px 17px;font-size:13px;cursor:pointer;transition:.2s}.opt:hover,.opt.selected{border-color:var(--accent);background:#171b08;color:#fff}.input{width:100%;max-width:700px;margin-top:35px;background:transparent;border:0;border-bottom:1px solid #454545;color:#fff;font-size:22px;padding:13px 0;outline:0;font-family:inherit}.input:focus{border-color:var(--accent)}.flowactions{display:flex;justify-content:space-between;align-items:center;padding:24px 0}.back{background:none;border:0;color:#777;cursor:pointer;font-size:10px;letter-spacing:.16em;text-transform:uppercase}.next{border:0;background:var(--fg);color:#080808;padding:16px 22px;font-size:10px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;cursor:pointer}.next:after{content:"  →"}.success{display:none;height:100%;align-items:center}.successbox{max-width:760px}.success h2{font-size:clamp(70px,10vw,135px);line-height:.76;letter-spacing:-.09em;margin:30px 0}.success p{color:var(--muted);font-size:18px;line-height:1.4;max-width:650px}.apply{font-size:52px;color:var(--accent);font-weight:900;letter-spacing:-.07em;margin-top:45px}.tiny{font-size:10px;color:#666;letter-spacing:.14em;text-transform:uppercase;margin-top:35px}
 
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-        }
-
-        /* HEADER */
-        header {
-            padding: 1.5rem;
-            text-align: center;
-            border-bottom: 1px solid var(--border);
-        }
-        .logo {
-            font-weight: 900;
-            font-size: 1.5rem;
-            letter-spacing: 2px;
-        }
-        .logo span { color: var(--accent); }
-        .header-sub {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-top: 0.5rem;
-        }
-
-        /* MAIN CONTAINER */
-        main {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem 1.5rem;
-        }
-
-        /* SCREENS */
-        .screen {
-            display: none;
-            max-width: 600px;
-            width: 100%;
-            animation: fadeIn 0.6s ease forwards;
-        }
-        .screen.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* TYPOGRAPHY */
-        .section-tag {
-            color: var(--accent);
-            font-size: 0.8rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 1.5rem;
-        }
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 900;
-            line-height: 1.1;
-            text-transform: uppercase;
-            margin-bottom: 1.5rem;
-        }
-        h2 {
-            font-size: 1.8rem;
-            font-weight: 800;
-            line-height: 1.2;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-        }
-        p {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 2rem;
-        }
-        .highlight { color: var(--accent); }
-
-        /* CARDS */
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-left: 4px solid var(--accent);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        .card-title {
-            font-weight: 800;
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-        }
-        .card-text {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            margin: 0;
-        }
-
-        /* FORM ELEMENTS */
-        .form-group { margin-bottom: 1.5rem; }
-        label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 1rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            color: var(--text);
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1rem;
-            border-radius: 4px;
-            transition: border-color 0.3s;
-        }
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-        textarea { min-height: 100px; resize: vertical; }
-
-        /* SLIDER */
-        .slider-container { text-align: center; margin: 2rem 0; }
-        .slider-value {
-            font-size: 4rem;
-            font-weight: 900;
-            color: var(--accent);
-            line-height: 1;
-        }
-        input[type="range"] {
-            width: 100%;
-            height: 6px;
-            background: var(--border);
-            border-radius: 3px;
-            -webkit-appearance: none;
-            margin: 1rem 0;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 24px;
-            height: 24px;
-            background: var(--accent);
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        /* CHECKBOXES */
-        .checkbox-group { display: flex; flex-direction: column; gap: 0.8rem; }
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            padding: 1rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .checkbox-item:hover { border-color: var(--accent); }
-        .checkbox-item input { width: auto; margin-right: 1rem; accent-color: var(--accent); }
-        .checkbox-item label { margin: 0; cursor: pointer; text-transform: none; font-weight: 500; }
-
-        /* BUTTONS */
-        .btn-group {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-        button {
-            flex: 1;
-            padding: 1.2rem;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 800;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: var(--accent);
-            color: #000;
-        }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(204, 255, 0, 0.2); }
-        .btn-secondary {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-        }
-        .btn-secondary:hover { border-color: var(--text); color: var(--text); }
-
-        /* SPOT COUNTER */
-        .spot-counter {
-            text-align: center;
-            margin-top: 2rem;
-            padding: 1rem;
-            border: 1px dashed var(--border);
-            border-radius: 4px;
-        }
-        .spot-counter span { color: var(--accent); font-weight: 800; }
-
-        /* SUCCESS */
-        .success-icon {
-            font-size: 5rem;
-            color: var(--accent);
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-        .success-text { text-align: center; }
-
-        /* RESPONSIVE */
-        @media (max-width: 600px) {
-            h1 { font-size: 2rem; }
-            h2 { font-size: 1.5rem; }
-            .btn-group { flex-direction: column; }
-        }
-    </style>
+@media(max-width:700px){.options{grid-template-columns:1fr;max-height:47vh;overflow:auto;padding-right:2px}.opt{width:100%;text-align:left}.wrap{padding:0 18px}.nav{display:none}.hero{min-height:calc(100vh - 82px);padding-bottom:35px}.hero:after{font-size:70vw;top:20vh}.section{padding:95px 0}.two{grid-template-columns:1fr;margin-top:55px}.tile h2{margin-top:75px}.flow{padding:20px 18px}.qtitle{font-size:44px}.flowactions{padding-bottom:12px}.options{margin-top:25px}.opt{width:100%;text-align:left}.success h2{font-size:70px}.apply{font-size:40px}footer{flex-direction:column;gap:16px}}
+</style>
 </head>
 <body>
+<div class="wrap">
+<nav><div class="logo">R<b>90</b></div><div class="nav">Primera generación · Protocolo de acceso</div></nav>
+<section class="hero"><div class="content"><div class="eyebrow">Primera generación</div><h1>RETO<br>90</h1><div class="lead">90 jugadores. 90 días.<br><strong>2 vías de desarrollo.</strong></div><button class="cta" onclick="start()">Iniciar Evaluación</button><div class="note">El reto empieza antes de entrar.</div></div></section>
 
-    <header>
-        <div class="logo">RETO <span>90</span></div>
-        <div class="header-sub">Primera generación · Solicitud de acceso</div>
-    </header>
+<section class="section"><div class="kicker">01 · La pregunta</div><h2 class="statement">TODOS<br>ENTRENAN.<br><span class="dim">¿PERO TODOS<br>SE DESARROLLAN?</span></h2></section>
 
-    <main>
-        <!-- PANTALLA 0: HERO -->
-        <div class="screen active" id="screen0">
-            <div class="section-tag">90 jugadores · 90 días</div>
-            <h1>El reto empieza <span class="highlight">antes de entrar.</span></h1>
-            <p>2 vías de desarrollo. Un solo objetivo: descubrir cuánto puede desarrollar cada jugador.</p>
-            
-            <div class="card">
-                <div class="card-title">La Academia desarrolla el juego.</div>
-                <div class="card-title highlight">Reto 90 desarrolla al jugador.</div>
-            </div>
+<section class="section"><div class="kicker">02 · El modelo</div><h2 class="statement">LA ACADEMIA<br>DESARROLLA<br>EL <span class="dim">JUEGO.</span></h2><div style="height:26px"></div><h2 class="statement">RETO 90<br>DESARROLLA<br>AL <span class="dim">JUGADOR.</span></h2>
+<div class="two"><div class="tile"><div class="n">01 / MOTOR</div><h2>FÍSICO</h2><p>Velocidad, aceleración, fuerza, potencia, coordinación, agilidad y movilidad.</p></div><div class="tile"><div class="n">02 / HERRAMIENTA</div><h2>TÉCNICA</h2><p>Control, conducción, pase, 1 vs 1, golpeo y finalización.</p></div></div></section>
 
-            <div class="spot-counter">
-                Lugares disponibles: <span id="spots">43</span> / 90
-            </div>
+<section class="section"><div class="kicker">03 · El ciclo</div><h2 class="statement">EVALUAR.<br>PRESCRIBIR.<br>ENTRENAR.<br>MEDIR.</h2><p style="color:#92928c;max-width:600px;font-size:20px;line-height:1.25;margin-top:45px">90 días no son una promesa. Son un ciclo de trabajo diseñado para descubrir cuánto puede desarrollar cada jugador.</p></section>
 
-            <div class="btn-group">
-                <button class="btn-primary" onclick="nextScreen(1)">Solicitar Acceso</button>
-            </div>
-        </div>
+<section class="section black"><div class="kicker">04 · Primera generación</div><h2>¿SERÁ<br>UNO DE<br>LOS 90?</h2><p style="font-size:21px;max-width:650px;line-height:1.15">No buscamos jugadores perfectos. Buscamos jugadores preparados para asumir el reto.</p><button class="cta" onclick="start()">Iniciar Evaluación</button><div style="font-size:10px;opacity:.5;margin-top:18px;letter-spacing:.15em;text-transform:uppercase">Completar la solicitud no garantiza un lugar.</div></section>
+<footer><div>RETO 90 · PHYSICAL × TECHNICAL</div><div>El reto empieza antes de entrar.</div></footer>
+</div>
 
-        <!-- PANTALLA 1: LA PREGUNTA (COMPROMISO) -->
-        <div class="screen" id="screen1">
-            <div class="section-tag">01 · La Pregunta</div>
-            <h2>Todo entrenan. <br><span class="highlight">¿Pero todos se desarrollan?</span></h2>
-            <p>En una escala del 1 al 10, ¿qué tan comprometido estás con transformar tu juego en los próximos 90 días?</p>
+<div class="modal" id="modal">
+<div class="flow">
+<div class="flowtop"><div class="flowlogo">R<b>90</b></div><div style="display:flex;align-items:center;gap:25px"><div class="counter" id="counter"></div><button class="close" onclick="closeFlow()">×</button></div></div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<div class="question" id="question"></div>
+<div class="flowactions"><button class="back" id="back" onclick="prev()">← Atrás</button><button class="next" id="next" onclick="next()">Continuar</button></div>
+<div class="success" id="success"><div class="successbox"><div class="qk">Evaluación recibida</div><h2>EL RETO<br>EMPIEZA<br>AQUÍ.</h2><p id="successText">Hemos recibido la solicitud. Nuestro equipo revisará el perfil y se pondrá en contacto contigo.</p><div class="apply">R90 · APPLY</div><div class="tiny">La selección de la Primera Generación se realiza después de revisar cada perfil.</div></div></div>
+</div>
+</div>
 
-            <div class="slider-container">
-                <div class="slider-value" id="sliderVal">5</div>
-                <input type="range" id="compromiso" min="1" max="10" value="5" oninput="updateSlider(this.value)">
-                <p style="font-size: 0.8rem; margin-top: 1rem;">⚠️ El reto requiere compromiso total (7 o más)</p>
-            </div>
+<script>
+// ⚠️ CAMBIA ESTO POR TU CORREO REAL (Mantén las comillas):
+const TU_CORREO = "tucorreo@gmail.com";
 
-            <div class="btn-group">
-                <button class="btn-secondary" onclick="prevScreen(0)">Atrás</button>
-                <button class="btn-primary" id="btn1" onclick="nextScreen(2)" disabled>Continuar</button>
-            </div>
-        </div>
+const steps=[
+{section:"PROTOCOLO DE ACCESO",title:"ESTO NO ES UNA INSCRIPCIÓN.",desc:"Es un filtro psicológico. <strong>Mientras lees esto</strong>, entiende que no buscamos llenar cupos. Buscamos perfiles que <strong>estén listos para romper su techo</strong>.",type:"choice",key:"ready",opts:["Entiendo. Quiero ser evaluado.","Solo quiero ver de qué se trata."]},
+{section:"01 / IDENTIDAD",title:"¿A QUIÉN VAMOS A TRANSFORMAR?",desc:"Los próximos 90 días no son para cualquiera. Dime el nombre del jugador que <strong>va a asumir el reto</strong>.",type:"input",key:"player",ph:"Nombre completo del jugador"},
+{section:"01 / IDENTIDAD",title:"¿CUÁNTOS AÑOS TIENE?",type:"choice",key:"age",opts:["8–9 años","10–11 años","12–13 años","14–15 años","16–17 años"]},
+{section:"01 / IDENTIDAD",title:"¿DÓNDE JUEGA ACTUALMENTE?",type:"input",key:"club",ph:"Academia o club actual"},
+{section:"02 / SU FÚTBOL",title:"¿CUÁL ES SU MAYOR FORTALEZA?",desc:"Reconocer lo que ya funciona es el primer paso para <strong>construir sobre bases sólidas</strong>.",type:"choice",key:"strength",opts:["Técnica","Velocidad","Fuerza","1 vs 1","Finalización","Pase","Coordinación","Inteligencia de juego","Personalidad / Carácter"]},
+{section:"02 / SU FÚTBOL",title:"¿CUÁL ES SU PRINCIPAL ÁREA DE OPORTUNIDAD?",type:"choice",key:"opportunity",opts:["Técnica","Velocidad","Fuerza","1 vs 1","Finalización","Pase","Coordinación","Agilidad","Otra"]},
+{section:"02 / SU FÚTBOL",title:"LA VERDAD DUELE.",desc:"Cuando <strong>observas su juego</strong> bajo presión, ¿qué es lo que <strong>te duele ver</strong> que le falta? Sé brutalmente honesto.",type:"input",key:"goal",ph:"Escribe aquí su mayor debilidad..."},
+{section:"03 / MOTOR FÍSICO",title:"¿QUÉ ASPECTO FÍSICO TE GUSTARÍA DESARROLLAR MÁS?",desc:"El cuerpo es la herramienta. <strong>Imagina su potencial</strong> si optimizamos este motor.",type:"choice",key:"physical",opts:["Aceleración","Velocidad máxima","Fuerza","Potencia","Coordinación","Agilidad","Movilidad","Resistencia","No estoy seguro"]},
+{section:"03 / MOTOR FÍSICO",title:"¿REALIZA ENTRENAMIENTO FÍSICO ESPECÍFICO?",type:"choice",key:"physicalTraining",opts:["Sí, constantemente","No, solo juega","Ocasionalmente"]},
+{section:"04 / HERRAMIENTA TÉCNICA",title:"¿CUÁL ES SU MAYOR FORTALEZA TÉCNICA?",type:"choice",key:"technicalStrength",opts:["Control","Pase","Conducción","Regate","1 vs 1","Golpeo","Finalización","Recepción orientada"]},
+{section:"04 / HERRAMIENTA TÉCNICA",title:"¿CUÁL DEBERÍA SER SU PRIORIDAD TÉCNICA?",type:"choice",key:"technicalGoal",opts:["Control","Pase","Conducción","Regate","1 vs 1","Golpeo","Finalización","Recepción orientada"]},
+{section:"05 / PROYECCIÓN",title:"DÍA 91.",desc:"PLACEHOLDER_DIA91",type:"input",key:"day90",ph:"Describe el cambio que quieres ver..."},
+{section:"06 / MENTALIDAD",title:"EL CONTRATO INVISIBLE.",desc:"El desarrollo de élite exige sacrificio. <strong>Mientras evalúas esta opción</strong>, ¿estás dispuesto a <strong>exigirle la disciplina</strong> que su cuerpo te va a pedir, incluso cuando no tenga ganas?",type:"choice",key:"commitment",opts:["1 · Todavía no lo sé","2 · Necesito pensarlo","3 · Estoy en proceso","4 · Casi listo","5 · Estamos 100% comprometidos con el reto"]},
+{section:"06 / MENTALIDAD",title:"¿POR QUÉ RETO 90?",desc:"Hay muchas academias. <strong>Al leer nuestra metodología</strong>, ¿qué fue lo que <strong>resonó contigo</strong> para estar aquí?",type:"input",key:"why",ph:"Cuéntanos por qué..."},
+{section:"07 / TUTOR",title:"¿QUIÉN ESTÁ DETRÁS DE ESTA SOLICITUD?",type:"input",key:"guardian",ph:"Nombre del padre / madre / tutor"},
+{section:"07 / TUTOR",title:"CANALES DE COMUNICACIÓN",desc:"WhatsApp y correo electrónico para <strong>comunicar el resultado</strong> de la evaluación.",type:"twoinput",key:"contact"},
+{section:"08 / CONFIRMACIÓN",title:"ESTÁS A UN PASO.",desc:"Completar esta solicitud no garantiza un lugar. La Primera Generación será seleccionada mediante un proceso de revisión. <strong>Al continuar, aceptas el reto</strong>.",type:"confirm",key:"confirm"}
+];
 
-        <!-- PANTALLA 2: EL MODELO (SACRIFICIO) -->
-        <div class="screen" id="screen2">
-            <div class="section-tag">02 · El Modelo</div>
-            <h2>¿Qué estás dispuesto a <span class="highlight">sacrificar?</span></h2>
-            <p>Los próximos 90 días requieren entrega total.</p>
+let i=0,data={};
+function start(){i=0;data={};document.getElementById('modal').classList.add('open');render()}
+function closeFlow(){document.getElementById('modal').classList.remove('open')}
+function render(){
+ document.getElementById('success').style.display='none';document.getElementById('question').style.display='flex';document.querySelector('.flowactions').style.display='flex';
+ const s=steps[i];document.getElementById('counter').textContent=`${String(i+1).padStart(2,'0')} / ${String(steps.length).padStart(2,'0')}`;
+ document.getElementById('bar').style.width=`${(i/(steps.length-1))*100}%`;
+ 
+ let desc = s.desc;
+ if(s.key === 'day90' && data.player) {
+  desc = `Cierra los ojos un segundo. Imagina que son 90 días después. Ves a <strong>${data.player}</strong> salir de la cancha. Algo en su mirada, en su postura, en cómo carga el balón... es diferente. Ya no es el mismo jugador que entró. ¿Qué es exactamente lo que <strong>cambió en él</strong>?`;
+ }
 
-            <div class="checkbox-group">
-                <div class="checkbox-item">
-                    <input type="checkbox" id="s1">
-                    <label for="s1">Disciplina de sueño estricta</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="s2">
-                    <label for="s2">Alimentación 100% limpia</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="s3">
-                    <label for="s3">Menos videojuegos/redes sociales</label>
-                </div>
-                <div class="checkbox-item" style="border-color: var(--accent);">
-                    <input type="checkbox" id="s4">
-                    <label for="s4" style="color: var(--accent); font-weight: 700;">TODO LO ANTERIOR</label>
-                </div>
-            </div>
+ let body=`<div class="qbox"><div class="qk">${s.section}</div><h2 class="qtitle">${s.title}</h2>${desc?`<div class="qdesc">${desc}</div>`:""}`;
+ if(s.type==="choice") body+=`<div class="options">${s.opts.map(o=>`<button class="opt ${data[s.key]===o?'selected':''}" onclick="choose('${escapeQ(s.key)}','${escapeQ(o)}')">${o}</button>`).join('')}</div><div style="font-size:10px;color:#666;letter-spacing:.13em;text-transform:uppercase;margin-top:14px">Selecciona una opción · avanzaremos automáticamente</div>`;
+ if(s.type==="input") body+=`<input class="input" id="field" value="${escapeQ(data[s.key]||"")}" placeholder="${s.ph}">`;
+ if(s.type==="twoinput") body+=`<input class="input" id="wa" value="${escapeQ(data.wa||"")}" placeholder="WhatsApp"><input class="input" id="email" value="${escapeQ(data.email||"")}" placeholder="Correo electrónico">`;
+ if(s.type==="confirm") body+=`<div class="options"><button class="opt ${data.confirm?'selected':''}" onclick="choose('confirm','accepted')">✓ Entiendo y quiero solicitar acceso</button></div>`;
+ body+="</div>";document.getElementById('question').innerHTML=body;
+ document.getElementById('back').style.visibility=i===0?'hidden':'visible';
+ document.getElementById('next').textContent=i===steps.length-1?'Enviar Evaluación':'Continuar';
+}
+function choose(k,v){data[k]=v; if(k!=='confirm'){clearTimeout(window.r90Timer); window.r90Timer=setTimeout(()=>next(),220)} else render()}
+function save(){
+ const s=steps[i];
+ if(s.type==="input"){let v=document.getElementById('field').value.trim();if(!v){alert("Completa este campo para continuar.");return false}data[s.key]=v}
+ if(s.type==="twoinput"){let wa=document.getElementById('wa').value.trim(),email=document.getElementById('email').value.trim();if(!wa||!email){alert("Completa WhatsApp y correo para continuar.");return false}data.wa=wa;data.email=email}
+ if((s.type==="choice"||s.type==="confirm")&&!data[s.key]){alert("Selecciona una opción para continuar.");return false}
+ return true
+}
 
-            <div class="btn-group">
-                <button class="btn-secondary" onclick="prevScreen(1)">Atrás</button>
-                <button class="btn-primary" onclick="validateAndNext(2, 3)">Continuar</button>
-            </div>
-        </div>
+function next(){
+ if(!save())return;
+ if(i<steps.length-1){i++;render()}
+ else{
+  const formData = {
+   _subject: " NUEVA EVALUACIÓN RETO 90 - " + (data.player||"Jugador"),
+   Jugador: data.player,
+   Edad: data.age,
+   Club: data.club,
+   Fortaleza: data.strength,
+   Oportunidad: data.opportunity,
+   "Debilidad/Verdad": data.goal,
+   Físico: data.physical,
+   "Entrenamiento físico": data.physicalTraining,
+   "Fortaleza técnica": data.technicalStrength,
+   "Prioridad técnica": data.technicalGoal,
+   "Proyección Día 91": data.day90,
+   Compromiso: data.commitment,
+   "Por qué R90": data.why,
+   Tutor: data.guardian,
+   WhatsApp: data.wa,
+   Email: data.email
+  };
+  fetch("https://formsubmit.co/ajax/" + TU_CORREO, {
+   method: "POST",
+   headers: { "Content-Type": "application/json", "Accept": "application/json" },
+   body: JSON.stringify(formData)
+  }).then(r => console.log("Enviado a correo")).catch(e => console.error(e));
 
-        <!-- PANTALLA 3: EL JUGADOR (DATOS) -->
-        <div class="screen" id="screen3">
-            <div class="section-tag">03 · El Jugador</div>
-            <h2>Conócete. <span class="highlight">Sé honesto.</span></h2>
-            
-            <div class="form-group">
-                <label>Nombre completo del jugador</label>
-                <input type="text" id="nombreJugador">
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <div class="form-group">
-                    <label>Edad</label>
-                    <input type="number" id="edad" min="7" max="16">
-                </div>
-                <div class="form-group">
-                    <label>Categoría</label>
-                    <select id="categoria">
-                        <option value="">Selecciona...</option>
-                        <option>Sub-7</option><option>Sub-8</option><option>Sub-9</option>
-                        <option>Sub-10</option><option>Sub-11</option><option>Sub-12</option>
-                        <option>Sub-13</option><option>Sub-14</option><option>Sub-15</option><option>Sub-16</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Posición principal</label>
-                <select id="posicion">
-                    <option value="">Selecciona...</option>
-                    <option>Portero</option><option>Defensa</option><option>Mediocampista</option>
-                    <option>Delantero</option><option>Juego libre</option>
-                </select>
-            </div>
-
-            <div class="btn-group">
-                <button class="btn-secondary" onclick="prevScreen(2)">Atrás</button>
-                <button class="btn-primary" onclick="validateAndNext(3, 4)">Continuar</button>
-            </div>
-        </div>
-
-        <!-- PANTALLA 4: EL CICLO (LA VERDAD) -->
-        <div class="screen" id="screen4">
-            <div class="section-tag">04 · El Ciclo</div>
-            <h2 class="highlight">Evaluar. Prescribir. Entrenar. Medir.</h2>
-            <p>90 días no son una promesa. Son un ciclo de trabajo.</p>
-
-            <div class="form-group">
-                <label>¿Cuál es tu MAYOR debilidad que has estado evitando trabajar?</label>
-                <textarea id="debilidad" placeholder="Sé honesto..."></textarea>
-            </div>
-            <div class="form-group">
-                <label>¿Por qué crees que <span class="highlight">esta vez será diferente</span>?</label>
-                <textarea id="diferente" placeholder="El reto empieza con esta respuesta..."></textarea>
-            </div>
-
-            <div class="btn-group">
-                <button class="btn-secondary" onclick="prevScreen(3)">Atrás</button>
-                <button class="btn-primary" onclick="validateTextAndNext(4, 5)">Continuar</button>
-            </div>
-        </div>
-
-        <!-- PANTALLA 5: PRIMERA GENERACIÓN (CIERRE) -->
-        <div class="screen" id="screen5">
-            <div class="section-tag">05 · Primera Generación</div>
-            <h2>¿Será uno de los <span class="highlight">90?</span></h2>
-            <p>No buscamos jugadores perfectos. Buscamos jugadores preparados para asumir el reto.</p>
-
-            <div class="form-group">
-                <label>Nombre del Padre/Madre (Compromiso público)</label>
-                <input type="text" id="nombrePadre">
-            </div>
-            <div class="form-group">
-                <label>Teléfono (WhatsApp)</label>
-                <input type="tel" id="telefono" placeholder="55 1234 5678">
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="email">
-            </div>
-
-            <div class="btn-group">
-                <button class="btn-secondary" onclick="prevScreen(4)">Atrás</button>
-                <button class="btn-primary" onclick="submitForm()">Enviar Solicitud</button>
-            </div>
-        </div>
-
-        <!-- PANTALLA 6: ÉXITO -->
-        <div class="screen" id="screen6">
-            <div class="success-icon">✓</div>
-            <h1 class="success-text">El reto <span class="highlight">empieza aquí.</span></h1>
-            <p class="success-text">Hemos recibido la solicitud. Nuestro equipo revisará el perfil y se pondrá en contacto contigo.</p>
-            <div class="card" style="text-align: center;">
-                <div class="card-title highlight">R90 · APPLY</div>
-                <div class="card-text">La selección de la Primera Generación se realiza después de revisar cada perfil.</div>
-            </div>
-        </div>
-
-    </main>
-
-    <script>
-        // ⚠️ CAMBIA ESTE NÚMERO POR EL TUYO (Formato: 52 + 10 dígitos, sin espacios)
-        const TU_NUMERO_WHATSAPP = "5215512345678"; 
-
-        let currentScreen = 0;
-
-        function showScreen(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById('screen' + id).classList.add('active');
-            currentScreen = id;
-            window.scrollTo(0, 0);
-        }
-
-        function nextScreen(id) { showScreen(id); }
-        function prevScreen(id) { showScreen(id); }
-
-        function updateSlider(val) {
-            document.getElementById('sliderVal').innerText = val;
-            document.getElementById('btn1').disabled = val < 7;
-        }
-
-        function validateAndNext(current, next) {
-            // Validación simple de checkboxes
-            if (current === 2) {
-                const checks = ['s1', 's2', 's3', 's4'];
-                const isChecked = checks.some(id => document.getElementById(id).checked);
-                if (!isChecked) { alert("Debes seleccionar al menos un sacrificio."); return; }
-            }
-            // Validación simple de inputs
-            if (current === 3) {
-                const fields = ['nombreJugador', 'edad', 'categoria', 'posicion'];
-                const isEmpty = fields.some(id => !document.getElementById(id).value);
-                if (isEmpty) { alert("Por favor completa todos los campos."); return; }
-            }
-            showScreen(next);
-        }
-
-        function validateTextAndNext(current, next) {
-            const debilidad = document.getElementById('debilidad').value;
-            const diferente = document.getElementById('diferente').value;
-            if (debilidad.length < 10 || diferente.length < 10) {
-                alert("Sé más detallado en tus respuestas. El reto exige honestidad.");
-                return;
-            }
-            showScreen(next);
-        }
-
-        function submitForm() {
-            const fields = ['nombrePadre', 'telefono', 'email'];
-            const isEmpty = fields.some(id => !document.getElementById(id).value);
-            if (isEmpty) { alert("Completa tus datos de contacto."); return; }
-
-            // Recopilar datos
-            const data = {
-                compromiso: document.getElementById('compromiso').value,
-                jugador: document.getElementById('nombreJugador').value,
-                edad: document.getElementById('edad').value,
-                categoria: document.getElementById('categoria').value,
-                posicion: document.getElementById('posicion').value,
-                debilidad: document.getElementById('debilidad').value,
-                diferente: document.getElementById('diferente').value,
-                padre: document.getElementById('nombrePadre').value,
-                tel: document.getElementById('telefono').value,
-                email: document.getElementById('email').value
-            };
-
-            // Crear mensaje de WhatsApp
-            const msg = `*RETO 90 - NUEVA SOLICITUD*%0A%0A` +
-                        `*Jugador:* ${data.jugador} (${data.edad} años - ${data.categoria})%0A` +
-                        `*Posición:* ${data.posicion}%0A` +
-                        `*Compromiso:* ${data.compromiso}/10%0A%0A` +
-                        `*Debilidad:* ${data.debilidad}%0A` +
-                        `*Por qué será diferente:* ${data.diferente}%0A%0A` +
-                        `*Contacto:* ${data.padre}%0A` +
-                        `*Tel:* ${data.tel}%0A` +
-                        `*Email:* ${data.email}`;
-
-            // Abrir WhatsApp
-            window.open(`https://wa.me/${TU_NUMERO_WHATSAPP}?text=${msg}`, '_blank');
-
-            // Mostrar pantalla final
-            showScreen(6);
-        }
-    </script>
+  document.getElementById('question').style.display='none';
+  document.querySelector('.flowactions').style.display='none';
+  document.getElementById('success').style.display='flex';
+  document.getElementById('bar').style.width='100%';
+  document.getElementById('successText').innerHTML=`La evaluación de <strong>${data.player||"tu jugador"}</strong> fue recibida. Nuestro equipo revisará el perfil y se pondrá en contacto contigo.`;
+ }
+}
+function prev(){if(i>0){i--;render()}}
+function escapeQ(x){return String(x).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+</script>
 </body>
 </html>
