@@ -1,4 +1,4 @@
-<!do<!doctype html>
+<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -54,15 +54,11 @@ const TU_CORREO = "tucorreo@gmail.com";
 const steps=[
 {section:"PROTOCOLO DE ACCESO",title:"ESTO NO ES UNA INSCRIPCIÓN.",desc:"Es un filtro psicológico. <strong>Mientras lees esto</strong>, entiende que no buscamos llenar cupos. Buscamos perfiles que <strong>estén listos para romper su techo</strong>.",type:"choice",key:"ready",opts:["Entiendo. Quiero ser evaluado.","Solo quiero ver de qué se trata."]},
 
-{section:"01 / IDENTIDAD",title:"¿A QUIÉN VAMOS A TRANSFORMAR?",desc:"Los próximos 90 días no son para cualquiera. Dime el nombre del jugador que <strong>va a asumir el reto</strong>.",type:"triple",keys:["player","gender","age"],ph:"Nombre completo",genderOpts:["Jugador (niño)","Jugadora (niña)"],ageOpts:["8–9 años","10–11 años","12–13 años","14–15 años","16–17 años"]},
+{section:"01 / IDENTIDAD",title:"¿A QUIÉN VAMOS A TRANSFORMAR?",desc:"Los próximos 90 días no son para cualquiera. Dime el nombre del jugador que <strong>va a asumir el reto</strong>.",type:"triple",keys:["player","gender","age","club"],ph:"Nombre completo",genderOpts:["Jugador (niño)","Jugadora (niña)"],ageOpts:["8–9 años","10–11 años","12–13 años","14–15 años","16–17 años"],phClub:"Academia, colegio o club actual"},
 
-{section:"01 / IDENTIDAD",title:"¿DÓNDE JUEGA ACTUALMENTE?",desc:"Reto 90 es complementario. Tu hijo sigue en su equipo, nosotros lo hacemos imparable ahí.",type:"input",key:"club",ph:"Academia, colegio o club actual"},
+{section:"02 / DIAGNÓSTICO COMPLETO",title:"DIAGNÓSTICO DE RENDIMIENTO",desc:"Selecciona su fortaleza actual, su área de oportunidad, y qué priorizaríamos en lo físico y técnico.",type:"quad",keys:["strength","opportunity","physical","technicalGoal"],label1:"Fortaleza actual",label2:"Área de oportunidad",label3:"Prioridad física",label4:"Prioridad técnica",generalOpts:["Técnica","Velocidad","Fuerza","1 vs 1","Finalización","Pase","Coordinación","Agilidad","Inteligencia de juego","Personalidad / Carácter","Otra"],physicalOpts:["Aceleración","Velocidad máxima","Fuerza","Potencia","Coordinación","Agilidad","Movilidad","Resistencia"],technicalOpts:["Control","Pase","Conducción","Regate","1 vs 1","Golpeo","Finalización","Recepción orientada"]},
 
-{section:"02 / SU FÚTBOL",title:"FORTALEZA Y OPORTUNIDAD",desc:"Reconocer lo que ya funciona es el primer paso. Identificar lo que falta es el segundo.",type:"double",keys:["strength","opportunity"],label1:"Mayor fortaleza",label2:"Principal área de oportunidad",opts:["Técnica","Velocidad","Fuerza","1 vs 1","Finalización","Pase","Coordinación","Agilidad","Inteligencia de juego","Personalidad / Carácter","Otra"]},
-
-{section:"02 / SU FÚTBOL",title:"LA VERDAD DUELE.",desc:"Cuando <strong>observas su juego</strong> bajo presión, ¿qué es lo que <strong>te duele ver</strong> que le falta? Sé brutalmente honesto.",type:"input",key:"goal",ph:"Escribe aquí su mayor debilidad..."},
-
-{section:"03 / PRIORIDAD DE DESARROLLO",title:"¿DÓNDE PONEMOS EL FOCO?",desc:"Si solo pudiéramos mejorar UNA cosa en lo físico y UNA en lo técnico durante 90 días, ¿cuáles elegirías?",type:"double",keys:["physical","technicalGoal"],label1:"Prioridad física",label2:"Prioridad técnica",opts:["Aceleración","Velocidad máxima","Fuerza","Potencia","Coordinación","Agilidad","Movilidad","Resistencia","Control","Pase","Conducción","Regate","1 vs 1","Golpeo","Finalización","Recepción orientada"]},
+{section:"03 / LA VERDAD",title:"LA VERDAD DUELE.",desc:"Cuando <strong>observas su juego</strong> bajo presión, ¿qué es lo que <strong>te duele ver</strong> que le falta? Sé brutalmente honesto.",type:"input",key:"goal",ph:"Escribe aquí su mayor debilidad..."},
 
 {section:"04 / PROYECCIÓN",title:"DÍA 91.",desc:"PLACEHOLDER_DIA91",type:"input",key:"day90",ph:"Describe el cambio que quieres ver..."},
 
@@ -77,7 +73,6 @@ let i=0,data={};
 function start(){i=0;data={};document.getElementById('modal').classList.add('open');render()}
 function closeFlow(){document.getElementById('modal').classList.remove('open')}
 
-// Helper para género
 function gt(male, female) {
   return data.gender === 'female' ? female : male;
 }
@@ -90,8 +85,6 @@ function render(){
  let desc = s.desc;
  if(s.key === 'day90' || (s.keys && s.keys.includes('day90'))) {
   if(data.player) {
-   const jugadorWord = gt('jugador', 'jugadora');
-   const mismoWord = gt('mismo', 'misma');
    const elWord = gt('él', 'ella');
    desc = `Cierra los ojos un segundo. Son 90 días después. <strong>${data.player}</strong> vuelve a la cancha con su academia o colegio. Algo cambió. El coach ${gt('lo','la')} mira diferente. Sus compañeros ${gt('lo','la')} buscan más. Los rivales ${gt('lo','la')} respetan. Ya no es ${gt('el mismo jugador','la misma jugadora')} que entró. ¿Qué es exactamente lo que <strong>notan en ${elWord}</strong>?`;
   }
@@ -105,16 +98,21 @@ function render(){
  
  if(s.type==="triple") {
   body+=`<input class="input" id="field_player" value="${escapeQ(data.player||"")}" placeholder="${s.ph}" style="margin-bottom:20px">`;
-  body+=`<div style="font-size:10px;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">Género</div>`;
-  body+=`<div class="options" style="margin-top:0;margin-bottom:20px">${s.genderOpts.map((o,idx)=>`<button class="opt ${data.gender===(idx===0?'male':'female')?'selected':''}" onclick="choose('gender','${idx===0?'male':'female'}')">${o}</button>`).join('')}</div>`;
-  body+=`<div style="font-size:10px;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">Edad</div>`;
-  body+=`<div class="options" style="margin-top:0">${s.ageOpts.map(o=>`<button class="opt ${data.age===o?'selected':''}" onclick="choose('age','${escapeQ(o)}')">${o}</button>`).join('')}</div>`;
+  body+=`<div class="input-row" style="margin-top:20px">`;
+  body+=`<div><div style="font-size:10px;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">Género</div><div class="options" style="margin-top:0">${s.genderOpts.map((o,idx)=>`<button class="opt ${data.gender===(idx===0?'male':'female')?'selected':''}" onclick="choose('gender','${idx===0?'male':'female'}')">${o}</button>`).join('')}</div></div>`;
+  body+=`<div><div style="font-size:10px;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">Edad</div><div class="options" style="margin-top:0">${s.ageOpts.map(o=>`<button class="opt ${data.age===o?'selected':''}" onclick="choose('age','${escapeQ(o)}')">${o}</button>`).join('')}</div></div>`;
+  body+=`</div>`;
+  body+=`<input class="input" id="field_club" value="${escapeQ(data.club||"")}" placeholder="${s.phClub}" style="margin-top:20px">`;
  }
  
- if(s.type==="double") {
+ if(s.type==="quad") {
   body+=`<div class="input-row">`;
-  body+=`<div><div style="font-size:10px;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">${s.label1}</div><select class="input" id="field1" style="font-size:16px;padding:15px"><option value="">Selecciona...</option>${s.opts.map(o=>`<option value="${o}" ${data[s.keys[0]]===o?'selected':''}>${o}</option>`).join('')}</select></div>`;
-  body+=`<div><div style="font-size:10px;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">${s.label2}</div><select class="input" id="field2" style="font-size:16px;padding:15px"><option value="">Selecciona...</option>${s.opts.map(o=>`<option value="${o}" ${data[s.keys[1]]===o?'selected':''}>${o}</option>`).join('')}</select></div>`;
+  body+=`<div><div style="font-size:10px;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">${s.label1}</div><select class="input" id="field1" style="font-size:16px;padding:15px"><option value="">Selecciona...</option>${s.generalOpts.map(o=>`<option value="${o}" ${data[s.keys[0]]===o?'selected':''}>${o}</option>`).join('')}</select></div>`;
+  body+=`<div><div style="font-size:10px;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">${s.label2}</div><select class="input" id="field2" style="font-size:16px;padding:15px"><option value="">Selecciona...</option>${s.generalOpts.map(o=>`<option value="${o}" ${data[s.keys[1]]===o?'selected':''}>${o}</option>`).join('')}</select></div>`;
+  body+=`</div>`;
+  body+=`<div class="input-row" style="margin-top:20px">`;
+  body+=`<div><div style="font-size:10px;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">${s.label3}</div><select class="input" id="field3" style="font-size:16px;padding:15px"><option value="">Selecciona...</option>${s.physicalOpts.map(o=>`<option value="${o}" ${data[s.keys[2]]===o?'selected':''}>${o}</option>`).join('')}</select></div>`;
+  body+=`<div><div style="font-size:10px;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">${s.label4}</div><select class="input" id="field4" style="font-size:16px;padding:15px"><option value="">Selecciona...</option>${s.technicalOpts.map(o=>`<option value="${o}" ${data[s.keys[3]]===o?'selected':''}>${o}</option>`).join('')}</select></div>`;
   body+=`</div>`;
  }
  
@@ -144,11 +142,12 @@ function save(){
   let p=document.getElementById('field_player').value.trim();if(!p){alert("Completa el nombre para continuar.");return false}data.player=p;
   if(!data.gender){alert("Selecciona el género para continuar.");return false}
   if(!data.age){alert("Selecciona la edad para continuar.");return false}
+  let c=document.getElementById('field_club').value.trim();if(!c){alert("Completa el club para continuar.");return false}data.club=c;
  }
- if(s.type==="double"){
-  let v1=document.getElementById('field1').value,v2=document.getElementById('field2').value;
-  if(!v1||!v2){alert("Completa ambas selecciones para continuar.");return false}
-  data[s.keys[0]]=v1;data[s.keys[1]]=v2;
+ if(s.type==="quad"){
+  let v1=document.getElementById('field1').value,v2=document.getElementById('field2').value,v3=document.getElementById('field3').value,v4=document.getElementById('field4').value;
+  if(!v1||!v2||!v3||!v4){alert("Completa las 4 selecciones para continuar.");return false}
+  data[s.keys[0]]=v1;data[s.keys[1]]=v2;data[s.keys[2]]=v3;data[s.keys[3]]=v4;
  }
  if(s.type==="quadruple"){
   let w=document.getElementById('field_why').value.trim(),g=document.getElementById('field_guardian').value.trim(),wa=document.getElementById('field_wa').value.trim(),em=document.getElementById('field_email').value.trim();
@@ -195,148 +194,6 @@ function next(){
   const jugadorWord = gt('jugador', 'jugadora');
   document.getElementById('successText').innerHTML=`El protocolo de <strong>${data.player||"tu " + jugadorWord}</strong> ha sido recibido.<br><br>Nuestro equipo revisará el perfil. Si encaja con los estándares de la Primera Generación, nos pondremos en contacto contigo para definir el siguiente paso.`;
   document.getElementById('successTiny').textContent = "La selección es estricta. Solo contactamos a los perfiles viables.";
- }
-}
-function prev(){if(i>0){i--;render()}}
-function escapeQ(x){return String(x).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-</script>
-</body>
-</html>ctype html>
-<html lang="es">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RETO 90 — Protocolo de Acceso</title>
-<style>
-:root{--bg:#080808;--fg:#f3f3ee;--muted:#92928c;--line:#252525;--panel:#111;--accent:#dfff38}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--fg);font-family:Arial,Helvetica,sans-serif;letter-spacing:-.025em}.wrap{max-width:1320px;margin:auto;padding:0 30px}
-nav{height:82px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}.logo{font-weight:950;font-size:25px;letter-spacing:-.08em}.logo b{color:var(--accent)}.nav{font-size:10px;color:var(--muted);letter-spacing:.18em;text-transform:uppercase}
-.hero{min-height:calc(100vh - 82px);display:flex;align-items:flex-end;padding:70px 0 55px;position:relative;overflow:hidden}.hero:after{content:"90";position:absolute;right:-4vw;top:5vh;font-size:42vw;line-height:.7;font-weight:950;color:#101010;letter-spacing:-.13em}.hero .content{position:relative;z-index:1}.eyebrow,.kicker{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:28px}
-h1{font-size:clamp(90px,15vw,210px);line-height:.73;letter-spacing:-.1em;margin:0}.lead{font-size:clamp(22px,3vw,40px);line-height:1.02;max-width:780px;margin:52px 0 35px}.lead strong{font-weight:900}.cta{border:0;cursor:pointer;background:var(--accent);color:#080808;padding:19px 23px;font-weight:900;font-size:11px;letter-spacing:.16em;text-transform:uppercase;display:inline-flex;gap:26px;align-items:center}.cta:after{content:"↗";font-size:17px}.note{font-size:10px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-top:17px}
-.section{padding:145px 0;border-top:1px solid var(--line)}.statement{font-size:clamp(54px,8.6vw,125px);line-height:.84;letter-spacing:-.085em;margin:0}.dim{color:#777}.two{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:80px}.tile{background:var(--panel);padding:42px;min-height:320px}.tile .n{color:var(--accent);font-size:10px;letter-spacing:.18em}.tile h2{font-size:60px;letter-spacing:-.075em;margin:100px 0 15px}.tile p{color:var(--muted);max-width:480px;line-height:1.4}
-.black{background:var(--fg);color:#090909}.black .kicker{color:#090909}.black .cta{background:#090909;color:#fff}.black h2{font-size:clamp(70px,11vw,160px);line-height:.8;letter-spacing:-.09em;margin:0 0 50px}
-footer{padding:50px 0;display:flex;justify-content:space-between;color:var(--muted);font-size:10px;letter-spacing:.16em;text-transform:uppercase}
-
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.95);backdrop-filter:blur(20px);z-index:10;display:none}.modal.open{display:block}.flow{height:100%;max-width:1100px;margin:auto;padding:26px 30px;display:flex;flex-direction:column}.flowtop{display:flex;justify-content:space-between;align-items:center}.flowlogo{font-weight:950;font-size:21px}.flowlogo b{color:var(--accent)}.counter{font-size:10px;letter-spacing:.2em;color:var(--muted)}.close{border:0;background:none;color:#999;font-size:30px;cursor:pointer}
-.progress{height:2px;background:#262626;margin-top:24px}.bar{height:100%;width:0;background:var(--accent);transition:.4s}.question{flex:1;display:flex;align-items:center}.qbox{width:100%;max-width:900px}.qk{font-size:10px;color:var(--accent);letter-spacing:.22em;text-transform:uppercase;margin-bottom:25px}.qtitle{font-size:clamp(44px,6.3vw,82px);line-height:.9;letter-spacing:-.075em;margin:0 0 16px}.qdesc{color:var(--muted);font-size:17px;line-height:1.45;max-width:640px}.qdesc strong{color:var(--fg);font-weight:600}.options{display:flex;flex-wrap:wrap;gap:8px;margin-top:38px}.opt{background:#111;border:1px solid #303030;color:#eee;padding:15px 17px;font-size:13px;cursor:pointer;transition:.2s}.opt:hover,.opt.selected{border-color:var(--accent);background:#171b08;color:#fff}.input{width:100%;max-width:700px;margin-top:35px;background:transparent;border:0;border-bottom:1px solid #454545;color:#fff;font-size:22px;padding:13px 0;outline:0;font-family:inherit}.input:focus{border-color:var(--accent)}.flowactions{display:flex;justify-content:space-between;align-items:center;padding:24px 0}.back{background:none;border:0;color:#777;cursor:pointer;font-size:10px;letter-spacing:.16em;text-transform:uppercase}.next{border:0;background:var(--fg);color:#080808;padding:16px 22px;font-size:10px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;cursor:pointer}.next:after{content:"  →"}.success{display:none;height:100%;align-items:center}.successbox{max-width:760px}.success h2{font-size:clamp(70px,10vw,135px);line-height:.76;letter-spacing:-.09em;margin:30px 0}.success p{color:var(--muted);font-size:18px;line-height:1.4;max-width:650px}.apply{font-size:52px;color:var(--accent);font-weight:900;letter-spacing:-.07em;margin-top:45px}.tiny{font-size:10px;color:#666;letter-spacing:.14em;text-transform:uppercase;margin-top:35px}
-
-@media(max-width:700px){.options{grid-template-columns:1fr;max-height:47vh;overflow:auto;padding-right:2px}.opt{width:100%;text-align:left}.wrap{padding:0 18px}.nav{display:none}.hero{min-height:calc(100vh - 82px);padding-bottom:35px}.hero:after{font-size:70vw;top:20vh}.section{padding:95px 0}.two{grid-template-columns:1fr;margin-top:55px}.tile h2{margin-top:75px}.flow{padding:20px 18px}.qtitle{font-size:44px}.flowactions{padding-bottom:12px}.options{margin-top:25px}.opt{width:100%;text-align:left}.success h2{font-size:70px}.apply{font-size:40px}footer{flex-direction:column;gap:16px}}
-</style>
-</head>
-<body>
-<div class="wrap">
-<nav><div class="logo">R<b>90</b></div><div class="nav">Primera generación · Protocolo de acceso</div></nav>
-<section class="hero"><div class="content"><div class="eyebrow">Primera generación</div><h1>RETO<br>90</h1><div class="lead">90 jugadores. 90 días.<br><strong>2 vías de desarrollo.</strong></div><button class="cta" onclick="start()">Iniciar Evaluación</button><div class="note">El reto empieza antes de entrar.</div></div></section>
-
-<section class="section"><div class="kicker">01 · La pregunta</div><h2 class="statement">TODOS<br>ENTRENAN.<br><span class="dim">¿PERO TODOS<br>SE DESARROLLAN?</span></h2></section>
-
-<section class="section"><div class="kicker">02 · El modelo</div><h2 class="statement">LA ACADEMIA<br>DESARROLLA<br>EL <span class="dim">JUEGO.</span></h2><div style="height:26px"></div><h2 class="statement">RETO 90<br>DESARROLLA<br>AL <span class="dim">JUGADOR.</span></h2>
-<div class="two"><div class="tile"><div class="n">01 / MOTOR</div><h2>FÍSICO</h2><p>Velocidad, aceleración, fuerza, potencia, coordinación, agilidad y movilidad.</p></div><div class="tile"><div class="n">02 / HERRAMIENTA</div><h2>TÉCNICA</h2><p>Control, conducción, pase, 1 vs 1, golpeo y finalización.</p></div></div></section>
-
-<section class="section"><div class="kicker">03 · El ciclo</div><h2 class="statement">EVALUAR.<br>PRESCRIBIR.<br>ENTRENAR.<br>MEDIR.</h2><p style="color:#92928c;max-width:600px;font-size:20px;line-height:1.25;margin-top:45px">90 días no son una promesa. Son un ciclo de trabajo diseñado para descubrir cuánto puede desarrollar cada jugador.</p></section>
-
-<section class="section black"><div class="kicker">04 · Primera generación</div><h2>¿SERÁ<br>UNO DE<br>LOS 90?</h2><p style="font-size:21px;max-width:650px;line-height:1.15">No buscamos jugadores perfectos. Buscamos jugadores preparados para asumir el reto.</p><button class="cta" onclick="start()">Iniciar Evaluación</button><div style="font-size:10px;opacity:.5;margin-top:18px;letter-spacing:.15em;text-transform:uppercase">Completar la solicitud no garantiza un lugar.</div></section>
-<footer><div>RETO 90 · PHYSICAL × TECHNICAL</div><div>El reto empieza antes de entrar.</div></footer>
-</div>
-
-<div class="modal" id="modal">
-<div class="flow">
-<div class="flowtop"><div class="flowlogo">R<b>90</b></div><div style="display:flex;align-items:center;gap:25px"><div class="counter" id="counter"></div><button class="close" onclick="closeFlow()">×</button></div></div>
-<div class="progress"><div class="bar" id="bar"></div></div>
-<div class="question" id="question"></div>
-<div class="flowactions"><button class="back" id="back" onclick="prev()">← Atrás</button><button class="next" id="next" onclick="next()">Continuar</button></div>
-<div class="success" id="success"><div class="successbox"><div class="qk">Evaluación recibida</div><h2>EL RETO<br>EMPIEZA<br>AQUÍ.</h2><p id="successText">Hemos recibido la solicitud. Nuestro equipo revisará el perfil y se pondrá en contacto contigo.</p><div class="apply">R90 · APPLY</div><div class="tiny">La selección de la Primera Generación se realiza después de revisar cada perfil.</div></div></div>
-</div>
-</div>
-
-<script>
-// ⚠️ CAMBIA ESTO POR TU CORREO REAL (Mantén las comillas):
-const TU_CORREO = "tucorreo@gmail.com";
-
-const steps=[
-{section:"PROTOCOLO DE ACCESO",title:"ESTO NO ES UNA INSCRIPCIÓN.",desc:"Es un filtro psicológico. <strong>Mientras lees esto</strong>, entiende que no buscamos llenar cupos. Buscamos perfiles que <strong>estén listos para romper su techo</strong>.",type:"choice",key:"ready",opts:["Entiendo. Quiero ser evaluado.","Solo quiero ver de qué se trata."]},
-{section:"01 / IDENTIDAD",title:"¿A QUIÉN VAMOS A TRANSFORMAR?",desc:"Los próximos 90 días no son para cualquiera. Dime el nombre del jugador que <strong>va a asumir el reto</strong>.",type:"input",key:"player",ph:"Nombre completo del jugador"},
-{section:"01 / IDENTIDAD",title:"¿CUÁNTOS AÑOS TIENE?",type:"choice",key:"age",opts:["8–9 años","10–11 años","12–13 años","14–15 años","16–17 años"]},
-{section:"01 / IDENTIDAD",title:"¿DÓNDE JUEGA ACTUALMENTE?",type:"input",key:"club",ph:"Academia o club actual"},
-{section:"02 / SU FÚTBOL",title:"¿CUÁL ES SU MAYOR FORTALEZA?",desc:"Reconocer lo que ya funciona es el primer paso para <strong>construir sobre bases sólidas</strong>.",type:"choice",key:"strength",opts:["Técnica","Velocidad","Fuerza","1 vs 1","Finalización","Pase","Coordinación","Inteligencia de juego","Personalidad / Carácter"]},
-{section:"02 / SU FÚTBOL",title:"¿CUÁL ES SU PRINCIPAL ÁREA DE OPORTUNIDAD?",type:"choice",key:"opportunity",opts:["Técnica","Velocidad","Fuerza","1 vs 1","Finalización","Pase","Coordinación","Agilidad","Otra"]},
-{section:"02 / SU FÚTBOL",title:"LA VERDAD DUELE.",desc:"Cuando <strong>observas su juego</strong> bajo presión, ¿qué es lo que <strong>te duele ver</strong> que le falta? Sé brutalmente honesto.",type:"input",key:"goal",ph:"Escribe aquí su mayor debilidad..."},
-{section:"03 / MOTOR FÍSICO",title:"¿QUÉ ASPECTO FÍSICO TE GUSTARÍA DESARROLLAR MÁS?",desc:"El cuerpo es la herramienta. <strong>Imagina su potencial</strong> si optimizamos este motor.",type:"choice",key:"physical",opts:["Aceleración","Velocidad máxima","Fuerza","Potencia","Coordinación","Agilidad","Movilidad","Resistencia","No estoy seguro"]},
-{section:"03 / MOTOR FÍSICO",title:"¿REALIZA ENTRENAMIENTO FÍSICO ESPECÍFICO?",type:"choice",key:"physicalTraining",opts:["Sí, constantemente","No, solo juega","Ocasionalmente"]},
-{section:"04 / HERRAMIENTA TÉCNICA",title:"¿CUÁL ES SU MAYOR FORTALEZA TÉCNICA?",type:"choice",key:"technicalStrength",opts:["Control","Pase","Conducción","Regate","1 vs 1","Golpeo","Finalización","Recepción orientada"]},
-{section:"04 / HERRAMIENTA TÉCNICA",title:"¿CUÁL DEBERÍA SER SU PRIORIDAD TÉCNICA?",type:"choice",key:"technicalGoal",opts:["Control","Pase","Conducción","Regate","1 vs 1","Golpeo","Finalización","Recepción orientada"]},
-{section:"05 / PROYECCIÓN",title:"DÍA 91.",desc:"PLACEHOLDER_DIA91",type:"input",key:"day90",ph:"Describe el cambio que quieres ver..."},
-{section:"06 / MENTALIDAD",title:"EL CONTRATO INVISIBLE.",desc:"El desarrollo de élite exige sacrificio. <strong>Mientras evalúas esta opción</strong>, ¿estás dispuesto a <strong>exigirle la disciplina</strong> que su cuerpo te va a pedir, incluso cuando no tenga ganas?",type:"choice",key:"commitment",opts:["1 · Todavía no lo sé","2 · Necesito pensarlo","3 · Estoy en proceso","4 · Casi listo","5 · Estamos 100% comprometidos con el reto"]},
-{section:"06 / MENTALIDAD",title:"¿POR QUÉ RETO 90?",desc:"Hay muchas academias. <strong>Al leer nuestra metodología</strong>, ¿qué fue lo que <strong>resonó contigo</strong> para estar aquí?",type:"input",key:"why",ph:"Cuéntanos por qué..."},
-{section:"07 / TUTOR",title:"¿QUIÉN ESTÁ DETRÁS DE ESTA SOLICITUD?",type:"input",key:"guardian",ph:"Nombre del padre / madre / tutor"},
-{section:"07 / TUTOR",title:"CANALES DE COMUNICACIÓN",desc:"WhatsApp y correo electrónico para <strong>comunicar el resultado</strong> de la evaluación.",type:"twoinput",key:"contact"},
-{section:"08 / CONFIRMACIÓN",title:"ESTÁS A UN PASO.",desc:"Completar esta solicitud no garantiza un lugar. La Primera Generación será seleccionada mediante un proceso de revisión. <strong>Al continuar, aceptas el reto</strong>.",type:"confirm",key:"confirm"}
-];
-
-let i=0,data={};
-function start(){i=0;data={};document.getElementById('modal').classList.add('open');render()}
-function closeFlow(){document.getElementById('modal').classList.remove('open')}
-function render(){
- document.getElementById('success').style.display='none';document.getElementById('question').style.display='flex';document.querySelector('.flowactions').style.display='flex';
- const s=steps[i];document.getElementById('counter').textContent=`${String(i+1).padStart(2,'0')} / ${String(steps.length).padStart(2,'0')}`;
- document.getElementById('bar').style.width=`${(i/(steps.length-1))*100}%`;
- 
- let desc = s.desc;
- if(s.key === 'day90' && data.player) {
-  desc = `Cierra los ojos un segundo. Imagina que son 90 días después. Ves a <strong>${data.player}</strong> salir de la cancha. Algo en su mirada, en su postura, en cómo carga el balón... es diferente. Ya no es el mismo jugador que entró. ¿Qué es exactamente lo que <strong>cambió en él</strong>?`;
- }
-
- let body=`<div class="qbox"><div class="qk">${s.section}</div><h2 class="qtitle">${s.title}</h2>${desc?`<div class="qdesc">${desc}</div>`:""}`;
- if(s.type==="choice") body+=`<div class="options">${s.opts.map(o=>`<button class="opt ${data[s.key]===o?'selected':''}" onclick="choose('${escapeQ(s.key)}','${escapeQ(o)}')">${o}</button>`).join('')}</div><div style="font-size:10px;color:#666;letter-spacing:.13em;text-transform:uppercase;margin-top:14px">Selecciona una opción · avanzaremos automáticamente</div>`;
- if(s.type==="input") body+=`<input class="input" id="field" value="${escapeQ(data[s.key]||"")}" placeholder="${s.ph}">`;
- if(s.type==="twoinput") body+=`<input class="input" id="wa" value="${escapeQ(data.wa||"")}" placeholder="WhatsApp"><input class="input" id="email" value="${escapeQ(data.email||"")}" placeholder="Correo electrónico">`;
- if(s.type==="confirm") body+=`<div class="options"><button class="opt ${data.confirm?'selected':''}" onclick="choose('confirm','accepted')">✓ Entiendo y quiero solicitar acceso</button></div>`;
- body+="</div>";document.getElementById('question').innerHTML=body;
- document.getElementById('back').style.visibility=i===0?'hidden':'visible';
- document.getElementById('next').textContent=i===steps.length-1?'Enviar Evaluación':'Continuar';
-}
-function choose(k,v){data[k]=v; if(k!=='confirm'){clearTimeout(window.r90Timer); window.r90Timer=setTimeout(()=>next(),220)} else render()}
-function save(){
- const s=steps[i];
- if(s.type==="input"){let v=document.getElementById('field').value.trim();if(!v){alert("Completa este campo para continuar.");return false}data[s.key]=v}
- if(s.type==="twoinput"){let wa=document.getElementById('wa').value.trim(),email=document.getElementById('email').value.trim();if(!wa||!email){alert("Completa WhatsApp y correo para continuar.");return false}data.wa=wa;data.email=email}
- if((s.type==="choice"||s.type==="confirm")&&!data[s.key]){alert("Selecciona una opción para continuar.");return false}
- return true
-}
-
-function next(){
- if(!save())return;
- if(i<steps.length-1){i++;render()}
- else{
-  const formData = {
-   _subject: " NUEVA EVALUACIÓN RETO 90 - " + (data.player||"Jugador"),
-   Jugador: data.player,
-   Edad: data.age,
-   Club: data.club,
-   Fortaleza: data.strength,
-   Oportunidad: data.opportunity,
-   "Debilidad/Verdad": data.goal,
-   Físico: data.physical,
-   "Entrenamiento físico": data.physicalTraining,
-   "Fortaleza técnica": data.technicalStrength,
-   "Prioridad técnica": data.technicalGoal,
-   "Proyección Día 91": data.day90,
-   Compromiso: data.commitment,
-   "Por qué R90": data.why,
-   Tutor: data.guardian,
-   WhatsApp: data.wa,
-   Email: data.email
-  };
-  fetch("https://formsubmit.co/ajax/" + TU_CORREO, {
-   method: "POST",
-   headers: { "Content-Type": "application/json", "Accept": "application/json" },
-   body: JSON.stringify(formData)
-  }).then(r => console.log("Enviado a correo")).catch(e => console.error(e));
-
-  document.getElementById('question').style.display='none';
-  document.querySelector('.flowactions').style.display='none';
-  document.getElementById('success').style.display='flex';
-  document.getElementById('bar').style.width='100%';
-  document.getElementById('successText').innerHTML=`La evaluación de <strong>${data.player||"tu jugador"}</strong> fue recibida. Nuestro equipo revisará el perfil y se pondrá en contacto contigo.`;
  }
 }
 function prev(){if(i>0){i--;render()}}
